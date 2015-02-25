@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Beampressk</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <!-- Le styles -->
+        <link href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename = 'css/docs.min.css') }}" rel="stylesheet">
+      
+        <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+      
+        <!-- This file store project specific CSS -->
+        <link href="{{ url_for('static', filename = 'css/main.css') }}" rel="stylesheet">
+      
+        <!-- Use this to quickly test CSS changes in a template,
+            then move to project.css -->
+        {% block styles %}{% endblock styles %}
+    </head>
+    
+    <body>
+    
+        {% block navbar %}
+        {% endblock %}
+    
+        {% block content %}
+        <div class="container">
+            {% block title %}{% endblock title %}
+            {% block page_content %}{% endblock %}
+        </div>
+        {% endblock %}
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="{{ url_for('static', filename = 'js/jquery-1.11.0.min.js') }}"></script>
+        <script src="{{ url_for('static', filename = 'js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename = 'js/docs.min.js') }}"></script>        
+        {% block scripts %}{% endblock scripts %}
+    </body>
+</html>
