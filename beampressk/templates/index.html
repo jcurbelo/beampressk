@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+  <div class="bs">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#">1</a></li>
+    </ul>
+	<div class="tab-content">
+	   <div class="tab-pane fade in active">
+	   		<div class="panel panel-default">
+	  			<div class="panel-heading">Presentation 1</div>
+				<div class="btn-group btn-group-justified">
+				  <a id="prev" class="btn btn-default" role="button">Prev</a>
+				  <a id="next" class="btn btn-default" role="button">Next</a>
+				</div>
+				<div class="panel-footer">
+					<p id="log"></p>
+				</div>
+			</div>
+	   </div>
+	</div>    
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/socket.io.min.js') }}"></script>
+
+<script>
+	$(document).ready(function(){
+	    var socket = io.connect('http://' + document.domain + ':' + location.port + '/beampressk');
+	    socket.on('response', function(msg) {
+	        $('#log').html('<p>' + msg.data + '</p>');
+	    });    
+	    $('#next').on('click', function(event) {
+	        socket.emit('next cmd');
+	        event.preventDefault();
+	    });
+	    $('#prev').on('click', function(event) {
+	        socket.emit('prev cmd');
+	        event.preventDefault();
+	    });
+	});
+</script>
+{% endblock %}
