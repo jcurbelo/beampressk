@@ -2,25 +2,35 @@
 
 {% block page_content %}
 
-  <div class="bs">
+<!--   <div class="bs">
     <ul class="nav nav-tabs">
       <li class="active"><a href="#">1</a></li>
     </ul>
 	<div class="tab-content">
-	   <div class="tab-pane fade in active">
+	   <div class="tab-pane fade in active"> -->
 	   		<div class="panel panel-default">
-	  			<div class="panel-heading">Presentation 1</div>
+	  			<div class="panel-heading">{{ name }}</div>
 				<div class="btn-group btn-group-justified">
-				  <a id="prev" style="height: 200px;" class="btn btn-default" role="button">Prev</a>
+				  <a id="prev" style="height: 150px;" class="btn btn-default" role="button">Prev</a>
 				  <a id="next" class="btn btn-default" role="button">Next</a>
 				</div>
 				<div class="panel-footer">
-					<p id="log"></p>
+					<p id="log">
+						<b>FRAME: </b>{{ current_frame + 1 }}<br>
+						<b>SLIDE: </b>{{ current_slide }}
+					</p>
 				</div>
 			</div>
-	   </div>
+
+			<form action="" role="form">
+				<div class="form-group">
+					<label for="volume-range">Volume: </label>
+					<input id="volume-range" class="form-control" type="range" value="100" step="1" min="0" max="100">
+				</div>
+			</form>
+<!-- 	   </div>
 	</div>    
-  </div>
+  </div> -->
 
 {% endblock %}
 
@@ -32,15 +42,20 @@
 	$(document).ready(function(){
 	    var socket = io.connect('http://' + document.domain + ':' + location.port + '/beampressk');
 	    socket.on('response', function(msg) {
-	        $('#log').html('<p>' + msg.data + '</p>');
+	        $('#log').html('<p><b>FRAME: </b>' + (msg.data.currentFrame + 1) + '<br><b>SLIDE: </b>' + msg.data.currentSlide + '</p>');
 	    });    
 	    $('#next').on('click', function(event) {
-	        socket.emit('next cmd');
+	        socket.emit('next');
 	        event.preventDefault();
 	    });
 	    $('#prev').on('click', function(event) {
-	        socket.emit('prev cmd');
+	        socket.emit('prev');
 	        event.preventDefault();
+	    });
+
+	    $('#volume-range').on('input', function(e){
+	    	var vol = this.value * 1e-2;
+	    	socket.emit('volume', {data: vol});
 	    });
 	});
 </script>

@@ -23,7 +23,7 @@
                 $el.css('opacity', 0);
             },
             showItem: function ($el, args){
-                $el.css('opacity', 100);
+                $el.css('opacity', 1);
             },
             addStyle: function($el, args){
                 $el.css(args);
@@ -58,15 +58,17 @@
                 $el.animate(args['values'], args['speed']);
             },
             playAudio: function ($el, args){
-                var args = $.extend({}, {'currentTime': 0}, args);
+                var args = $.extend({}, {'currentTime': 0, 'volume': 1}, args);
                 $el.trigger('play');
                 $el.prop('currentTime', args['currentTime']);
+                $el.prop('volume', args['volume']);
             },
             playVideo: function ($el, args){
-                var args = $.extend({}, {'currentTime': 0}, args);
-                $el.attr({"style": ""});                                                                   
+                var args = $.extend({}, {'currentTime': 0, 'volume': 1}, args);                                                                
                 $el.trigger('play');
+                $el.css('display', 'block');
                 $el.prop('currentTime', args['currentTime']);
+                $el.prop('volume', args['volume']);
             },            
             stopAudio: function ($el, args){
                 $el.trigger('pause');
@@ -74,7 +76,7 @@
             },
             stopVideo: function ($el, args){
                 $el.trigger('pause');
-                $el.css({"display": "none"});
+                // $el.css({"display": "none"});
                 $el.prop("currentTime", 0);  
             },            
             fadeInAudio: function ($el, args){
@@ -86,7 +88,7 @@
             },
             fadeInVideo: function ($el, args){
                 var args = $.extend({}, {'currentTime': 0, 'speed': 'slow', 'values':{'volume' : 1}}, args);
-                $el.attr({"style": ""}); 
+                $el.css('display', 'block');
                 $el.trigger('play');
                 $el.prop('currentTime', args['currentTime']);
                 $el.prop('volume', 0);                
@@ -366,7 +368,12 @@
             //Showing first slide
             self.frames[self.options.currentFrame].show();
             //Increasing first slide show
-            next();
+            // Experimental: performing fastfoward
+            var limit = self.options.currentSlide;
+            self.options.currentSlide = 0;
+            for (var i = 0; i <= limit; i++) {
+                next();
+            }
         } 
 
         function setSlides(slideItem){
@@ -523,27 +530,27 @@
         function setEventHandlers () {
             var socket = io.connect('http://' + document.domain + ':' + location.port + '/beampressk');
             var msg = function(){
-                return '<b>FRAME: </b>' + (self.currentFrame + 1) + '<br><b>SLIDE: </b> ' + self.currentSlide;
+                return {'currentFrame':self.options.currentFrame, 'currentSlide': self.options.currentSlide };
             };
-            socket.on('next cmd response', function() {
+            socket.on('next_response', function() {
                 next();
-                socket.emit('next', {data: msg()});
+                socket.emit('update_info', {data: msg()});
             });
-            socket.on('prev cmd response', function() {
+            socket.on('prev_response', function() {
                 previous();
-                socket.emit('prev', {data: msg()});
+                socket.emit('update_info', {data: msg()});
             });            
             //triggering key up
             $(document).on('keyup', function (event){
                  //right arrow || space bar
                  if(event.which == 39 || event.which == 32){
                      next();
-                     socket.emit('next', {data: msg()});
+                     socket.emit('update_info', {data: msg()});
                  }
                  //left arrow
                  if(event.which == 37){
                      previous();
-                     socket.emit('prev', {data: msg()});
+                     socket.emit('update_info', {data: msg()});
                  }
             });            
         }
