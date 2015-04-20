@@ -40,3 +40,17 @@ nosetests.xml
 
 # Virtual environment
 venv
+
+# Images
+*.jpg
+*.png
+*.jpeg
+*.bmp
+*.gif
+*.JPG
+
+# Audios
+*.mp3
+
+# Videos
+*.mp4
