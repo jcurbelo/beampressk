@@ -1,13 +1,13 @@
-import redis
 from flask import Flask, render_template, session, request, make_response
 from flask.ext.socketio import SocketIO, emit, disconnect
-from flask_kvsession import KVSessionExtension
-from simplekv.memory.redisstore import RedisStore
+from gevent import monkey
 
-# store = RedisStore(redis.StrictRedis())
+monkey.patch_all()
+
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '4ed8b4b022d12f40e9c06e6d7fcfd964e13f22810e865717'
-# KVSessionExtension(store, app)
+
 socketio = SocketIO(app)
 
 database = {
@@ -33,7 +33,7 @@ def index():
                            name=database.get('name', ''))
 
 # Presentations
-@app.route('/<name>')
+@app.route('/presentation/<name>')
 def show(name):
     """
     Presentation should be placed at 'templates/<presentation-name>'
@@ -42,6 +42,15 @@ def show(name):
     database['name'] = name
     return render_template('%s/index.html' % name, current_frame=database.get('current_frame', 0),
                            current_slide=database.get('current_slide', 0) - 1)
+
+# Responses
+@socketio.on('update_info', namespace='/beampressk')
+def beampressk_update_info(message):
+    data = message.get('data', {})
+    # Updating database
+    database['current_frame'] = data.get('currentFrame', 0)
+    database['current_slide'] = data.get('currentSlide', 0)
+    emit('response', {'data': data}, broadcast=True)
 
 # Responses
 @socketio.on('update_info', namespace='/beampressk')
@@ -65,5 +74,14 @@ def beampressk_prev():
 def beampressk_volume(message):
     emit('volume_response', {'data': message.get('data', {})}, broadcast=True)
 
+@socketio.on('live_feed', namespace='/beampressk')
+def beampressk_live_feed():
+    emit('live_feed_response', broadcast=True)
+
+@socketio.on('reload', namespace='/beampressk')
+def beampressk_reload():
+    emit('reload_response', broadcast=True)   
+
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0')
+    # app.run(host='0.0.0.0')
