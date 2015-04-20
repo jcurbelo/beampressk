@@ -9,6 +9,7 @@
     // Create the defaults once
     var pluginName = 'beampress',
         defaults = {
+            mediaDict: {},
             // Repeating all effects going to a prev. Frame 
             repeatPrev: true,
             maxItems: 100,
@@ -16,6 +17,8 @@
             currentFrame: 0,
             // current slide (slide list starts at '1')
             currentSlide: 0,
+            // socket object for beampressk
+            socket: null,
             identity: function ($el, args){
 
             },
@@ -35,6 +38,7 @@
                 $el.css('display', 'none');
             },
             showFrame: function ($el, args){
+                $el.css('opacity', 1);
                 $el.css('display', 'block');
             },
             slowShowFrame: function ($el, args){
@@ -59,55 +63,125 @@
             },
             playAudio: function ($el, args){
                 var args = $.extend({}, {'currentTime': 0, 'volume': 1}, args);
-                $el.trigger('play');
-                $el.prop('currentTime', args['currentTime']);
-                $el.prop('volume', args['volume']);
+                if(!$el.attr('src'))
+                    $el.attr('src', defaults.mediaDict[$el.attr('id')]);
+                $el.trigger('load');
+                $el.bind('canplay', function(){
+                    $el.trigger('play');
+                    $el.prop('currentTime', args['currentTime']);
+                });
             },
             playVideo: function ($el, args){
-                var args = $.extend({}, {'currentTime': 0, 'volume': 1}, args);                                                                
-                $el.trigger('play');
-                $el.css('display', 'block');
-                $el.prop('currentTime', args['currentTime']);
-                $el.prop('volume', args['volume']);
+                var args = $.extend({}, {'currentTime': 0, 'volume': 1}, args);
+                if(!$el.attr('src'))
+                    $el.attr('src', defaults.mediaDict[$el.attr('id')]);
+                $el.trigger('load');
+                $el.bind('canplay', function(){
+                    $el.prop('currentTime', args['currentTime']);
+                    $el.trigger('play');
+                    $el.css('display', 'block');
+                    $el.prop('volume', args['volume']);
+                });                                                                                                  
             },            
             stopAudio: function ($el, args){
-                $el.trigger('pause');
-                $el.prop("currentTime", 0);  
+                // Assuming that media object was previosly created
+                // var media = defaults.mediaDict[$el.attr('id')];
+                // media[0].pause();
+                // media[0].currentTime = 0;
+
+                // $el.trigger('pause');
+                // $el.remove();
+                defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
+                // $el.prop("currentTime", 0);
+                $el.attr('src', null);  
             },
             stopVideo: function ($el, args){
-                $el.trigger('pause');
-                // $el.css({"display": "none"});
-                $el.prop("currentTime", 0);  
+                // Assuming that media object was previosly created
+                // var media = defaults.mediaDict[$el.attr('id')];
+                // media[0].pause();
+                // media[0].currentTime = 0;
+                // $el.remove();
+                defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
+                $el.css({"display": "none"});
+                // $el.prop("currentTime", 0);
+                $el.attr('src', null);
             },            
             fadeInAudio: function ($el, args){
                 var args = $.extend({}, {'currentTime': 0, 'speed': 'slow', 'values':{'volume' : 1}}, args);
-                $el.trigger('play');
-                $el.prop('currentTime', args['currentTime']);
-                $el.prop('volume', 0);                
-                $el.animate(args['values'], args['speed']);
+                if(!$el.attr('src'))
+                    $el.attr('src', defaults.mediaDict[$el.attr('id')]);
+                $el.trigger('load');
+                $el.bind('canplay', function(){
+                    $el.trigger('play');
+                    $el.prop('currentTime', args['currentTime']);
+                    // $el.prop('volume', 0);                      
+                });
+                // var media = defaults.mediaDict[$el.attr('id')] ||
+                //     $el.mediaelementplayer({
+                //         pauseOtherPlayers: true,
+                //         startVolume: 1
+                //     });
+                // defaults.mediaDict[$el.attr('id')] = media;
+                // media[0].currentTime = args['currentTime'];
+                // media[0].play();                                
+              
+                // $el.animate(args['values'], args['speed']);
             },
             fadeInVideo: function ($el, args){
                 var args = $.extend({}, {'currentTime': 0, 'speed': 'slow', 'values':{'volume' : 1}}, args);
+                if(!$el.attr('src'))
+                    $el.attr('src', defaults.mediaDict[$el.attr('id')]);
                 $el.css('display', 'block');
-                $el.trigger('play');
-                $el.prop('currentTime', args['currentTime']);
-                $el.prop('volume', 0);                
-                $el.animate(args['values'], args['speed']);                
+                $el.trigger('load');
+                $el.bind('canplay', function(){
+                    
+                    $el.trigger('play');
+                    $el.prop('currentTime', args['currentTime']);
+                    $el.prop('volume', 0);                     
+                });                 
+                // var media = defaults.mediaDict[$el.attr('id')] ||
+                //     $el.mediaelementplayer({
+                //         pauseOtherPlayers: true,
+                //         startVolume: 1
+                //     });
+                // defaults.mediaDict[$el.attr('id')] = media;
+                // media[0].currentTime = args['currentTime'];
+                // media[0].play();                 
+                $el.animate(args['values'], args['speed']);              
             },
             fadeOutAudio: function ($el, args){
                 var args = $.extend({}, {'speed': 'slow', 'values':{'volume' : 0}}, args);
-                $el.animate(args['values'], args['speed'], function () {
-                    $el.trigger('pause');
-                    $el.prop("currentTime", 0);
-                });
+                // Assuming that media object was previosly created
+                // var media = defaults.mediaDict[$el.attr('id')];
+                // $el.animate(args['values'], args['speed'], function () {
+                    // $el.trigger('pause');
+                    // $el.remove();
+                    // defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
+                    // $el.prop("currentTime", 0);
+                    // $el.attr('src', null);
+                // });
+                defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
+                // $el.prop("currentTime", 0);
+                $el.attr('src', null);                  
+                // defaults.mediaDict[$el.attr('id')] = $el.attr('src');
+                // $el.prop("currentTime", 0);
+                // $el.attr('src', null);                  
             },
             fadeOutVideo: function ($el, args){
                 var args = $.extend({}, {'speed': 'slow', 'values':{'volume' : 0}}, args);
-                $el.animate(args['values'], args['speed'], function () {
-                    $el.trigger('pause');
-                    $el.css({"display": "none"});
-                    $el.prop("currentTime", 0);
-                });
+                // Assuming that media object was previosly created
+                // var media = defaults.mediaDict[$el.attr('id')];
+                // $el.animate(args['values'], args['speed'], function () {
+                    // $el.trigger('pause');
+                    // $el.remove();
+                    defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
+                    // $el.prop("currentTime", 0);
+                    $el.attr('src', null);
+                    $el.css('display', 'none');
+                // });
+                // defaults.mediaDict[$el.attr('id')] = $el.attr('src');
+                // $el.prop("currentTime", 0);
+                // $el.attr('src', null);                
             },
             //Kinda boxing and unboxing params (I know is not so clear :( )
             ex: function(bag){
@@ -494,13 +568,12 @@
         //Show all slide items that are 'present' on
         //previous slide 
         function previous(){
+            updatePrevious();
             if(self.options.currentSlide == 1){
                 if(self.options.currentFrame - 1 < 0) return;
                 previousFrame();
                 self.options.currentSlide = self.lastPerFrame[self.options.currentFrame] + 1;
-            } else { 
-                updatePrevious();
-            }
+            } 
             self.options.currentSlide--;
             update();
         }
@@ -528,29 +601,36 @@
 
 
         function setEventHandlers () {
-            var socket = io.connect('http://' + document.domain + ':' + location.port + '/beampressk');
+            // var socket = io.connect('http://' + document.domain + ':' + location.port + '/beampressk');
             var msg = function(){
                 return {'currentFrame':self.options.currentFrame, 'currentSlide': self.options.currentSlide };
             };
-            socket.on('next_response', function() {
-                next();
-                socket.emit('update_info', {data: msg()});
-            });
-            socket.on('prev_response', function() {
-                previous();
-                socket.emit('update_info', {data: msg()});
-            });            
+            var socket = self.options.socket;
+            if(socket){
+                socket.on('next_response', function() {
+                    next();
+                    socket.emit('update_info', {data: msg()});
+                });
+                socket.on('prev_response', function() {
+                    previous();
+                    socket.emit('update_info', {data: msg()});
+                });        
+            }    
             //triggering key up
             $(document).on('keyup', function (event){
                  //right arrow || space bar
                  if(event.which == 39 || event.which == 32){
                      next();
-                     socket.emit('update_info', {data: msg()});
+                     console.log(self.options.mediaDict);
+                     if(socket)
+                        socket.emit('update_info', {data: msg()});
                  }
                  //left arrow
                  if(event.which == 37){
                      previous();
-                     socket.emit('update_info', {data: msg()});
+                     console.log(self.options.mediaDict);
+                     if(socket)
+                        socket.emit('update_info', {data: msg()});
                  }
             });            
         }
