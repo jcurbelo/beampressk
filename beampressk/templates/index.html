@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/powerange.min.css') }}" />
+{% endblock %}
 {% block page_content %}
 
 <!--   <div class="bs">
@@ -23,9 +25,13 @@
 			</div>
 
 			<form action="" role="form">
+				<div class="btn-group btn-group-justified">
+				  <a id="live-feed" style="height: 75px;" class="btn btn-default" role="button">Live Feed</a>
+				  <a id="reload" class="btn btn-default" role="button">Reload</a>
+				</div>					
 				<div class="form-group">
 					<label for="volume-range">Volume: </label>
-					<input id="volume-range" class="form-control" type="range" value="100" step="1" min="0" max="100">
+					<input id="volume-range" type="text" class="js-decimal" />
 				</div>
 			</form>
 <!-- 	   </div>
@@ -36,10 +42,15 @@
 
 {% block scripts %}
 {{ super() }}
+<script type='application/javascript' src="{{ url_for('static', filename = 'js/fastclick.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/powerange.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename = 'js/socket.io.min.js') }}"></script>
 
 <script>
 	$(document).ready(function(){
+		$(function() {
+		    FastClick.attach(document.body);
+		});		
 	    var socket = io.connect('http://' + document.domain + ':' + location.port + '/beampressk');
 	    socket.on('response', function(msg) {
 	        $('#log').html('<p><b>FRAME: </b>' + (msg.data.currentFrame + 1) + '<br><b>SLIDE: </b>' + msg.data.currentSlide + '</p>');
@@ -52,11 +63,20 @@
 	        socket.emit('prev');
 	        event.preventDefault();
 	    });
-
-	    $('#volume-range').on('input', function(e){
-	    	var vol = this.value * 1e-2;
-	    	socket.emit('volume', {data: vol});
+	    $('#live-feed').on('click', function(event) {
+	        socket.emit('live_feed');
+	        event.preventDefault();
 	    });
+	    $('#reload').on('click', function(event) {
+	        socket.emit('reload');
+	        event.preventDefault();
+	    });	    	    
+		var vol = document.querySelector('#volume-range');
+	    var initDec = new Powerange(vol, {callback: setVolume, decimal: true, min: 0, max: 100, start: 100 });		    
+	    function setVolume(){
+	    	var v = vol.value * 1e-2;
+	    	socket.emit('volume', {data: v});
+	    }
 	});
 </script>
 {% endblock %}
