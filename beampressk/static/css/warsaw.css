@@ -217,6 +217,10 @@ body {
     bottom: 0;
 }*/
 
+.frame-content .authors{
+    margin-top: 60px;
+}
+
 .authors > ul{
     color :black;
     list-style: none;
@@ -254,6 +258,10 @@ ol {
 
 .frame:first-of-type .block-title {
     text-align: center;
+    width: 700px;   
+    -webkit-box-shadow: 10px 10px 21px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 21px -4px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 21px -4px rgba(0,0,0,0.75);    
 }
 
 footer {

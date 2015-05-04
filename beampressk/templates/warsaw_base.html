@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"  content="">
+        <meta name="author" content="Proyecto Delta">    
+        <title>{% block title %}{% endblock title %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/warsaw.css') }}">         
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/livefeed.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/msg.css') }}">        
+        {% block styles %}{% endblock styles %}
+    </head>
+    
+    <body>
+        <video autoplay="true" id="live-feed"></video>  
+        <div class="msg-container">
+            <div class="msg-wrapper">
+                <p id="msg-text">Probando texto</p>
+            </div>
+        </div>  
+
+        <div id="main-container">
+            {% block content %}
+            {% endblock %}        
+        </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/socket.io.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/jquery-1.10.2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/beampress.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/loading.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/livefeed.js') }}"></script>
+    {% block scripts %}    
+    <script>
+        $(document).ready(function(){       
+            var s = io.connect('http://' + document.domain + ':' + location.port + '/beampressk'),
+                loading = new Loading(),
+                liveFeed = new LiveFeed({socket : s});
+            window['loading'] = loading;
+
+            s.on('volume_response', function(msg) {
+                $('audio, video').each(function (i, $el){
+                    if($el.attr('id') && $el.attr('id') != 'live-feed')
+                      $el.volume = msg.data;
+                });
+
+            });
+
+            s.on('reload_response', function() {
+                location.reload(true);
+            });
+
+            s.on('msg', function(msg){
+                $('.msg-container').css('display', 'block');
+                $('#msg-text').html(msg.data);
+            });
+
+            s.on('hide_msg_response', function (){
+                $('.msg-container').css('display', 'none');
+            }); 
+
+           $("#main-container").beampress({
+            'socket': s,
+            'currentFrame': {{ current_frame }}, 
+            'currentSlide': {{ current_slide }},
+            'animateProgress': loading.options.animateProgress });                                              
+
+        });
+    </script>         
+    {% endblock scripts %}
+    </body>
+</html>

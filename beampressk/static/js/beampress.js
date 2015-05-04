@@ -618,15 +618,16 @@
             }    
             //triggering key up
             $(document).on('keyup', function (event){
+                console.log(event.which);
                  //right arrow || space bar
-                 if(event.which == 39 || event.which == 32){
+                 if(event.which == 39 || event.which == 32 || event.which == 34){
                      next();
                      console.log(self.options.mediaDict);
                      if(socket)
                         socket.emit('update_info', {data: msg()});
                  }
                  //left arrow
-                 if(event.which == 37){
+                 if(event.which == 37 || event.which == 33){
                      previous();
                      console.log(self.options.mediaDict);
                      if(socket)

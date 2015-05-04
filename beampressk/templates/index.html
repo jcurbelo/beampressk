@@ -27,7 +27,8 @@
 			<form action="" role="form">
 				<div class="btn-group btn-group-justified">
 				  <a id="live-feed" style="height: 75px;" class="btn btn-default" role="button">Live Feed</a>
-				  <a id="reload" class="btn btn-default" role="button">Reload</a>
+				  <!-- <a id="reload" class="btn btn-default" role="button">Reload</a> -->
+				  <a id="hide-msg" class="btn btn-default" role="button">Hide msg</a>
 				</div>					
 				<div class="form-group">
 					<label for="volume-range">Volume: </label>
@@ -70,7 +71,11 @@
 	    $('#reload').on('click', function(event) {
 	        socket.emit('reload');
 	        event.preventDefault();
-	    });	    	    
+	    });
+	    $('#hide-msg').on('click', function(event) {
+	        socket.emit('hide_msg');
+	        event.preventDefault();
+	    });	    	    	    
 		var vol = document.querySelector('#volume-range');
 	    var initDec = new Powerange(vol, {callback: setVolume, decimal: true, min: 0, max: 100, start: 100 });		    
 	    function setVolume(){

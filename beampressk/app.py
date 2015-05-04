@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request, make_response
+from flask import Flask, render_template, session, request, make_response, jsonify
 from flask.ext.socketio import SocketIO, emit, disconnect
 from gevent import monkey
 
@@ -80,7 +80,26 @@ def beampressk_live_feed():
 
 @socketio.on('reload', namespace='/beampressk')
 def beampressk_reload():
-    emit('reload_response', broadcast=True)   
+    emit('reload_response', broadcast=True)
+
+@socketio.on('hide_msg', namespace='/beampressk')
+def beampressk_reload():
+    emit('hide_msg_response', broadcast=True)    
+
+# RESTful requests
+
+# POSTs
+@app.route('/action', methods=['POST'])
+def beampressk_emit_task():
+    if not request.json or not 'action' in request.json:
+        abort(400)
+    action = request.json['action']
+    if action == 'live_feed':
+        socketio.emit('live_feed_response', namespace='/beampressk')
+    elif action == 'msg':
+        data = request.json['data']
+        socketio.emit('msg', {'data': data}, namespace='/beampressk')
+    return jsonify({'action': action}), 200   
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0')
