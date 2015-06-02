@@ -1,9 +1,9 @@
 .msg-container {
     display: none;
     position: fixed;
-    top: 50%;
+    top: 33px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0%);
     width: 500px; 
     /*height: 375px;*/
     background: rgb(249, 229, 229);
@@ -17,4 +17,8 @@
     color: black;
     font-size: 28px;
     padding: 5px 15px;    
+}
+
+#msg-text{
+    margin:0;
 }
