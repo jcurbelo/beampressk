@@ -56,6 +56,7 @@ venv
 *.mp4
 
 # Custom files and directories
+*.sublime-*
 beampressk/static/css/chart.css
 beampressk/static/css/jquery.jqplot.min.css
 beampressk/static/css/prism.css
