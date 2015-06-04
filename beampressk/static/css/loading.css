@@ -45,6 +45,7 @@ padding-top: 10px;
 position: fixed;
 top: 290px;
 left: 216px;
+border-radius: 25px;
 }
 
 .progress-wrapper #info{
