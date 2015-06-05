@@ -16,12 +16,13 @@
     
     <body>
         {% include 'partials/live_feed.html' %}
+        {% include 'partials/msg.html' %}
         <!-- <video autoplay="true" id="live-feed"></video>   -->
-        <div class="msg-container">
+<!--         <div class="msg-container">
             <div class="msg-wrapper">
                 <p id="msg-text"></p>
             </div>
-        </div>  
+        </div>  --> 
 
         <div id="main-container">
             {% block content %}
@@ -56,11 +57,17 @@
 
             s.on('msg', function(msg){
                 $('.msg-container').css('display', 'block');
-                $('#msg-text').html(msg.data);
+                var html = '<li class="msg-effect"><img src="http://beampressk.com/img/anonymous.jpg"><div class="message">' + msg.data + '</div></li>',
+                    $el = $(html);
+                $el.appendTo('.inner-chat');
+                setTimeout(function(){$('.msg-effect').addClass('msg-show');}, 100);
+                                
             });
 
             s.on('hide_msg_response', function (){
-                $('.msg-container').css('display', 'none');
+                $('.inner-chat > li:last').removeClass('msg-show');
+                setTimeout(function(){$('.inner-chat > li:last').remove();}, 100);
+                
             }); 
 
            $("#main-container").beampress({
