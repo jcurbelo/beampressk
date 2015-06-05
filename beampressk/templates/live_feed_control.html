@@ -26,8 +26,6 @@
 
 			<form action="" role="form">
 				<div class="btn-group btn-group-justified">
-				  <a id="live-feed" style="height: 75px;" class="btn btn-default" role="button">Live Feed</a>
-				  <!-- <a id="reload" class="btn btn-default" role="button">Reload</a> -->
 				  <a id="hide-msg" class="btn btn-default" role="button">Hide msg</a>
 				</div>					
 				<div class="form-group">
@@ -35,6 +33,29 @@
 					<input id="volume-range" type="text" class="js-decimal" />
 				</div>
 			</form>
+			<div class="column">
+				<button class="live-feed-btn" data-modal="1" >Fade in &amp; Scale</button>
+				<button class="live-feed-btn" data-modal="2" >Slide in (right)</button>
+				<button class="live-feed-btn" data-modal="3" >Slide in (bottom)</button>
+				<button class="live-feed-btn" data-modal="4" >Newspaper</button>
+				<button class="live-feed-btn" data-modal="5" >Fall</button>
+				<button class="live-feed-btn" data-modal="6" >Side Fall</button>
+				<button class="live-feed-btn" data-modal="7" >Sticky Up</button>
+				<button class="live-feed-btn" data-modal="8" >3D Flip (horizontal)</button>
+				<button class="live-feed-btn" data-modal="9" >3D Flip (vertical)</button>
+				<button class="live-feed-btn" data-modal="10" >3D Sign</button>
+				<button class="live-feed-btn" data-modal="11" >Super Scaled</button>
+				<button class="live-feed-btn" data-modal="12" >Just Me</button>
+				<button class="live-feed-btn" data-modal="13" >3D Slit</button>
+				<button class="live-feed-btn" data-modal="14" >3D Rotate Bottom</button>
+				<button class="live-feed-btn" data-modal="15" >3D Rotate In Left</button>
+				<button class="live-feed-btn" data-modal="16" >Blur</button>
+				<!-- special modal that will add a perspective class to the html element -->
+				<button class="live-feed-btn" data-modal="17" >Let me in</button>
+				<button class="live-feed-btn" data-modal="18" >Make way!</button>
+				<button class="live-feed-btn" data-modal="19" >Slip from top</button>
+				<button class="live-feed-btn" data-modal="20" >Just audio</button>
+			</div>			
 <!-- 	   </div>
 	</div>    
   </div> -->
@@ -64,8 +85,8 @@
 	        socket.emit('prev');
 	        event.preventDefault();
 	    });
-	    $('#live-feed').on('click', function(event) {
-	        socket.emit('live_feed', {data: '1'});
+	    $('.live-feed-btn').on('click', function(event) {
+	        socket.emit('live_feed', {data: $(this).attr('data-modal')});
 	        event.preventDefault();
 	    });
 	    $('#reload').on('click', function(event) {

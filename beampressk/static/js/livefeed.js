@@ -8,6 +8,7 @@
     // Create the defaults once
     var defaults = {
             video : document.querySelector("#live-feed"),
+            videoContainer: $(".live-feed-container"),
             withAudio : true,
             liveFeedDisplayed : false,
             socket : null            
@@ -42,25 +43,38 @@
             // do something
         }
 
-        function liveFeed(){
-            if(self.options.liveFeedDisplayed){
-                self.options.video.style.display = 'none';
+        function liveFeed(index){
+   
+            if(self.options.liveFeedDisplayed){                
+                self.options.videoContainer.removeClass('md-show');
                 self.options.video.pause();
                     
             } else {
-                self.options.video.style.display = 'block';
+                // Removing class with 'md-effect' as a prefix
+                var prefix = "md-effect";
+                var classes = self.options.videoContainer.attr('class').split(" ").filter(function(c) {
+                    return c.lastIndexOf(prefix, 0) !== -1;
+                });
+                classes.forEach(function(cls, i){
+                    self.options.videoContainer.removeClass(cls);
+                });
+                self.options.videoContainer.className = $.trim(classes.join(" "));                
+                self.options.videoContainer.addClass('md-effect-' + index);
+                self.options.videoContainer.addClass('md-show');
                 self.options.video.play();
             }
             self.options.liveFeedDisplayed = !self.options.liveFeedDisplayed;              
         }
 
-        this.options.socket.on('live_feed_response', function() {
-            liveFeed();
+        this.options.socket.on('live_feed_response', function(msg) {
+            var index = msg.data;
+            liveFeed(index);
         });
 
         $(document).on('keyup', function (event){
              if(event.which == 67){
-                liveFeed();
+                console.log(self.options.liveFeedDisplayed);
+                liveFeed('1');
              }
         });          
 

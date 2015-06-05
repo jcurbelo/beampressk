@@ -32,6 +32,14 @@ def index():
                            current_slide=database.get('current_slide', 0),
                            name=database.get('name', ''))
 
+# Live Feed Control panel
+@app.route('/live-feed')
+def live_feed():
+    return render_template('live_feed_control.html', 
+                           current_frame=database.get('current_frame', 0),
+                           current_slide=database.get('current_slide', 0),
+                           name=database.get('name', ''))    
+
 # Presentations
 @app.route('/presentation/<name>')
 def show(name):
@@ -42,15 +50,6 @@ def show(name):
     database['name'] = name
     return render_template('%s/index.html' % name, current_frame=database.get('current_frame', 0),
                            current_slide=database.get('current_slide', 0) - 1)
-
-# Responses
-@socketio.on('update_info', namespace='/beampressk')
-def beampressk_update_info(message):
-    data = message.get('data', {})
-    # Updating database
-    database['current_frame'] = data.get('currentFrame', 0)
-    database['current_slide'] = data.get('currentSlide', 0)
-    emit('response', {'data': data}, broadcast=True)
 
 # Responses
 @socketio.on('update_info', namespace='/beampressk')
@@ -75,8 +74,8 @@ def beampressk_volume(message):
     emit('volume_response', {'data': message.get('data', {})}, broadcast=True)
 
 @socketio.on('live_feed', namespace='/beampressk')
-def beampressk_live_feed():
-    emit('live_feed_response', broadcast=True)
+def beampressk_live_feed(message):
+    emit('live_feed_response', {'data': message.get('data', {})}, broadcast=True)
 
 @socketio.on('reload', namespace='/beampressk')
 def beampressk_reload():
