@@ -138,6 +138,20 @@ body {
     box-shadow: 6px 6px 6px 0 #666666;
 }
 
+.little-msg{
+  color: white;
+  font-size: 44px;
+  padding: 5px 15px;
+  font-family: serif;
+}
+
+.frame .black{
+  background-color: black;
+  border-radius: 0;
+  background: black;
+  box-shadow: none;
+}
+
 .frame .example{
   background: rgb(229, 239, 229);
 }
