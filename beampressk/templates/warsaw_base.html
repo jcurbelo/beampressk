@@ -59,14 +59,32 @@
                 $('.msg-container').css('display', 'block');
                 var html = '<li class="msg-effect"><img src="http://beampressk.com/img/anonymous.jpg"><div class="message">' + msg.data + '</div></li>',
                     $el = $(html);
+                    len_children = $('.inner-chat').children().length;
+                console.log(len_children);
+                if (len_children === 0 || $('.first').length === 0)
+                    $el.addClass('first');
                 $el.appendTo('.inner-chat');
                 setTimeout(function(){$('.msg-effect').addClass('msg-show');}, 100);
                                 
             });
 
             s.on('hide_msg_response', function (){
-                $('.inner-chat > li:last').removeClass('msg-show');
-                setTimeout(function(){$('.inner-chat > li:last').remove();}, 100);
+                var $el = $('.inner-chat > .first');
+                // $el.removeClass('msg-show');
+                $('.first .message').animate({
+                    'height': '0px',
+                    'opacity': 0
+                },'fast', function () {
+
+                    $('.first img').animate({
+                        'height': '0px',
+                        'opacity': 0
+                    },'fast', function () {
+                        $el.removeClass('first');
+                        $el.css('display', 'none');
+                        $el.next().addClass('first');
+                    });                    
+                });
                 
             }); 
 
