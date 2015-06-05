@@ -44,7 +44,7 @@
 
             s.on('volume_response', function(msg) {
                 $('audio, video').each(function (i, $el){
-                    // if($el.attr('id') && $el.attr('id') != 'live-feed')
+                    if($el.id && $el.id !== 'live-feed')
                       $el.volume = msg.data;
                 });
 
