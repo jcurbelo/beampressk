@@ -24,7 +24,7 @@
 				</div>
 			</div>
 
-			<form action="" role="form">
+			<form class="main-form" action="" role="form">
 				<div class="btn-group btn-group-justified">
 				  <a id="live-feed" style="height: 75px;" class="btn btn-default" role="button">Live Feed</a>
 				  <!-- <a id="reload" class="btn btn-default" role="button">Reload</a> -->
@@ -86,7 +86,12 @@
 	    }
 
         socket.on('volume_response', function(msg) {
-            vol.value = msg.data * 1e2;
+            var value = msg.data,
+            	formWidth = $('.main-form').css('width'),
+            	sliderWidth = parseInt(formWidth.substr(0, formWidth.length - 2)) - 30;
+            	newPos = value * sliderWidth;
+            $('.range-handle').css('left', newPos + 'px');
+            $('.range-quantity').css('width', newPos + 'px');
         });	    
 	});
 </script>
