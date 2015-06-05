@@ -13,6 +13,7 @@ socketio = SocketIO(app)
 database = {
     'current_frame': 0,
     'current_slide': 1,
+    'volume': 100
 }
 
 # Custom errors
@@ -30,6 +31,7 @@ def index():
     return render_template('index.html', 
                            current_frame=database.get('current_frame', 0),
                            current_slide=database.get('current_slide', 0),
+                           volume=database.get('volume', 100),
                            name=database.get('name', ''))
 
 # Live Feed Control panel
@@ -38,6 +40,7 @@ def live_feed():
     return render_template('live_feed_control.html', 
                            current_frame=database.get('current_frame', 0),
                            current_slide=database.get('current_slide', 0),
+                           volume=database.get('volume', 100),
                            name=database.get('name', ''))    
 
 # Presentations
@@ -71,7 +74,8 @@ def beampressk_prev():
 
 @socketio.on('volume', namespace='/beampressk')
 def beampressk_volume(message):
-    emit('volume_response', {'data': message.get('data', {})}, broadcast=True)
+    database['volume'] = message.get('data', 1) * 1e2
+    emit('volume_response', {'data': message.get('data', 1)}, broadcast=True)
 
 @socketio.on('live_feed', namespace='/beampressk')
 def beampressk_live_feed(message):

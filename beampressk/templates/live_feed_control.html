@@ -98,11 +98,15 @@
 	        event.preventDefault();
 	    });	    	    	    
 		var vol = document.querySelector('#volume-range');
-	    var initDec = new Powerange(vol, {callback: setVolume, decimal: true, min: 0, max: 100, start: 100 });		    
+	    var initDec = new Powerange(vol, {hideRange: true, callback: setVolume, decimal: true, min: 0, max: 100, start: {{ volume }} });		    
 	    function setVolume(){
 	    	var v = vol.value * 1e-2;
 	    	socket.emit('volume', {data: v});
 	    }
+
+        socket.on('volume_response', function(msg) {
+            vol.value = msg.data * 1e2;
+        });	    
 	});
 </script>
 {% endblock %}
