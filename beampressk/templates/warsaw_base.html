@@ -38,7 +38,53 @@
     <script src="{{ url_for('static', filename = 'js/randomAudio.js') }}"></script>
     {% block scripts %}    
     <script>
-        $(document).ready(function(){       
+        $(document).ready(function(){
+            var $currentVideo = null,
+                fadeInArgs = {'currentTime': 0, 'duration': 'slow', 'values':{'volume' : 1}},
+                fadeOutArgs = {'duration': 'slow', 'values':{'volume' : 0}},
+                $frame = $('.inital-videos'),
+                videos = $.map($('.initial-video').toArray(), function (el, i){return $('#' + el.id);}),
+                index = -1,
+                doNext = true,
+                videoExec = null;
+
+            function initialVideos(){
+                videoExec = setInterval(videoTick, 100);
+            }   
+
+            function stopInitalVideos(){
+                clearInterval(videoExec);
+                $currentVideo.attr('src', null);                
+            }
+
+            function videoTick(){
+                if(doNext && index + 1 < videos.length){
+                    index += 1;
+                    $currentVideo = videos[index];
+
+                    $currentVideo.css('display', 'block');
+                    $currentVideo.trigger('load');
+                    $currentVideo.bind('canplay', function(){
+                        $currentVideo.trigger('play');
+                        $currentVideo.prop('volume', 0);
+                        $currentVideo.animate(fadeInArgs['values'], fadeInArgs['duration']);                                    
+                    });
+
+                    $currentVideo.bind('ended', function(){
+                        $currentVideo.css({"display": "none"});
+             
+                        $currentVideo.animate(fadeOutArgs['values'], fadeOutArgs['duration'], function(){
+                            $currentVideo.attr('src', null);
+                            doNext = true;
+                        });
+
+                    });
+
+                    doNext = false;
+                }                         
+
+            }  
+
             var s = io.connect('http://' + document.domain + ':' + location.port + '/beampressk'),
                 loading = new Loading(),
                 liveFeed = new LiveFeed({socket : s}),
@@ -89,7 +135,9 @@
             'socket': s,
             'currentFrame': {{ current_frame }}, 
             'currentSlide': {{ current_slide }},
-            'animateProgress': loading.options.animateProgress });                                              
+            'animateProgress': loading.options.animateProgress,
+            'initialVideos': initialVideos,
+            'stopInitalVideos': stopInitalVideos });                                             
 
         });
     </script>         

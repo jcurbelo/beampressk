@@ -1,7 +1,6 @@
 from flask import Flask, render_template, session, request, make_response, jsonify
 from flask.ext.socketio import SocketIO, emit, disconnect
 from gevent import monkey
-
 monkey.patch_all()
 
 
