@@ -86,8 +86,16 @@ def beampressk_reload():
     emit('reload_response', broadcast=True)
 
 @socketio.on('hide_msg', namespace='/beampressk')
-def beampressk_reload():
-    emit('hide_msg_response', broadcast=True)    
+def beampressk_hide_msg(message):
+    emit('hide_msg_response', broadcast=True)
+
+@socketio.on('play_random_audio', namespace='/beampressk')
+def beampressk_play_rnd(message):
+    emit('play_random_audio_response', {'data': message.get('data', {})}, broadcast=True)
+
+@socketio.on('stop_random_audio', namespace='/beampressk')
+def beampressk_stop_rnd(message):
+    emit('stop_random_audio_response', {'data': message.get('data', {})}, broadcast=True)                  
 
 # RESTful requests
 

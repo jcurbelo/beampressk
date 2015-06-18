@@ -35,12 +35,17 @@
     <script src="{{ url_for('static', filename = 'js/beampress.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/loading.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/livefeed.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/randomAudio.js') }}"></script>
     {% block scripts %}    
     <script>
         $(document).ready(function(){       
             var s = io.connect('http://' + document.domain + ':' + location.port + '/beampressk'),
                 loading = new Loading(),
-                liveFeed = new LiveFeed({socket : s});
+                liveFeed = new LiveFeed({socket : s}),
+                randomAudio = new RandomAudio({
+                    audios: $.map($('audio').toArray(), function (el, i){return $('#' + el.id);} ),
+                    socket:s
+                });
             window['loading'] = loading;
 
             s.on('volume_response', function(msg) {

@@ -27,6 +27,7 @@
 			<form class="main-form" action="" role="form">
 				<div class="btn-group btn-group-justified">
 				  <a id="hide-msg" class="btn btn-default" role="button">Hide msg</a>
+				  <a id="rnd" class="btn btn-default" role="button">Play Rnd</a>
 				</div>					
 				<div class="form-group">
 					<label for="volume-range">Volume: </label>
@@ -98,7 +99,19 @@
 	        event.preventDefault();
 	    });	    	    	    
 		var vol = document.querySelector('#volume-range');
-	    var initDec = new Powerange(vol, {hideRange: true, callback: setVolume, decimal: true, min: 0, max: 100, start: {{ volume }} });		    
+	    var initDec = new Powerange(vol, {hideRange: true, callback: setVolume, decimal: true, min: 0, max: 100, start: {{ volume }} });
+	    var played = false;
+	   	$('#rnd').on('click', function(event) {
+	   		if(!played){
+	        	socket.emit('play_random_audio', {data: {args:{}, fadeIn: true}});
+	        	$(this).html('Stop Rnd');
+	   		} else {
+	   			socket.emit('stop_random_audio', {data: {args:{}, fadeOut: true}});
+	   			$(this).html('Play Rnd');
+	   		}
+	   		played = !played;
+	        event.preventDefault();
+	    });	    		    
 	    function setVolume(){
 	    	var v = vol.value * 1e-2;
 	    	socket.emit('volume', {data: v});
