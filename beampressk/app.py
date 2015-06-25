@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, request, make_response, jsonify
 from flask.ext.socketio import SocketIO, emit, disconnect
 from gevent import monkey
+from decorators import requires_auth
 monkey.patch_all()
 
 
@@ -26,6 +27,7 @@ def internal_server_error(e):
 
 # Control panel
 @app.route('/')
+@requires_auth
 def index():
     return render_template('index.html', 
                            current_frame=database.get('current_frame', 0),
@@ -35,6 +37,7 @@ def index():
 
 # Live Feed Control panel
 @app.route('/live-feed')
+@requires_auth
 def live_feed():
     return render_template('live_feed_control.html', 
                            current_frame=database.get('current_frame', 0),
@@ -85,7 +88,7 @@ def beampressk_reload():
     emit('reload_response', broadcast=True)
 
 @socketio.on('hide_msg', namespace='/beampressk')
-def beampressk_hide_msg(message):
+def beampressk_hide_msg():
     emit('hide_msg_response', broadcast=True)
 
 @socketio.on('play_random_audio', namespace='/beampressk')
