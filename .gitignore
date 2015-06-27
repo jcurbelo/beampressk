@@ -76,4 +76,11 @@ beampressk/templates/percepcion/
 beampressk/templates/cleu2015/
 beampressk/static/js/MathJax.tar
 beampressk/static/js/MathJax/
-
+beampressk/static/css/ball.css
+beampressk/static/css/eduardo.css
+beampressk/static/css/jce.css
+beampressk/templates/contador/index2.html
+beampressk/templates/miedo/index.html
+beampressk/templates/predefensa/index.html
+beampressk/templates/tesis-eduardo/index.html
+beampressk/templates/tesis-robin/index.html
