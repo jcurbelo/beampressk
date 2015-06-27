@@ -138,6 +138,20 @@ body {
     box-shadow: 6px 6px 6px 0 #666666;
 }
 
+.little-msg{
+  color: white;
+  font-size: 44px;
+  padding: 5px 15px;
+  font-family: serif;
+}
+
+.frame .black{
+  background-color: black;
+  border-radius: 0;
+  background: black;
+  box-shadow: none;
+}
+
 .frame .example{
   background: rgb(229, 239, 229);
 }
@@ -256,7 +270,12 @@ ol {
     box-sizing: border-box;
 }*/
 
-.frame:first-of-type .block-title {
+/*.frame:first-of-type .frame-content {
+    padding: 0 70px;
+    box-sizing: border-box;
+}*/
+
+.frame .block-title.main {
     text-align: center;
     width: 700px;   
     -webkit-box-shadow: 10px 10px 21px -4px rgba(0,0,0,0.75);

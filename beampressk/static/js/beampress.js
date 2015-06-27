@@ -19,6 +19,8 @@
             currentSlide: 0,
             // socket object for beampressk
             socket: null,
+            // timeout var for timimng events
+            timeoutVar: null,
             identity: function ($el, args){
 
             },
@@ -44,146 +46,93 @@
             slowShowFrame: function ($el, args){
                 $el.css('opacity', 0);
                 $el.css('display', 'block');
-                var args = $.extend({}, {'values':{'opacity': 1}, 'speed': 'slow'}, args);
-                $el.animate(args['values'], args['speed']);                
+                var args = $.extend({}, {'values':{'opacity': 1}, 'duration': 'slow'}, args);
+                $el.animate(args['values'], args['duration']);                
             },
             slowHideFrame: function ($el, args){
-                var args = $.extend({}, {'values':{'opacity': 0}, 'speed': 'slow'}, args);
-                $el.animate(args['values'], args['speed'], function(){
+                var args = $.extend({}, {'values':{'opacity': 0}, 'duration': 'slow'}, args);
+                $el.animate(args['values'], args['duration'], function(){
                     $el.css('display', 'none');
                 });                
             },
             slowHideItem: function ($el, args){
-                var args = $.extend({}, {'values':{'opacity': 0}, 'speed': 'slow'}, args);
-                $el.animate(args['values'], args['speed']);
+                var args = $.extend({}, {'values':{'opacity': 0}, 'duration': 'slow'}, args);
+                $el.animate(args['values'], args['duration']);
             },
             slowShowItem: function ($el, args){
-                var args = $.extend({}, {'values':{'opacity': 1}, 'speed': 'slow'}, args);
-                $el.animate(args['values'], args['speed']);
+                var args = $.extend({}, {'values':{'opacity': 1}, 'duration': 'slow'}, args);
+                $el.animate(args['values'], args['duration']);
             },
-            playAudio: function ($el, args){
-                var args = $.extend({}, {'currentTime': 0, 'volume': 1}, args);
-                if(!$el.attr('src'))
-                    $el.attr('src', defaults.mediaDict[$el.attr('id')]);
-                $el.trigger('load');
-                $el.bind('canplay', function(){
-                    $el.trigger('play');
-                    $el.prop('currentTime', args['currentTime']);
-                });
-            },
-            playVideo: function ($el, args){
-                var args = $.extend({}, {'currentTime': 0, 'volume': 1}, args);
-                if(!$el.attr('src'))
-                    $el.attr('src', defaults.mediaDict[$el.attr('id')]);
-                $el.trigger('load');
-                $el.bind('canplay', function(){
-                    $el.prop('currentTime', args['currentTime']);
-                    $el.trigger('play');
-                    $el.css('display', 'block');
-                    $el.prop('volume', args['volume']);
-                });                                                                                                  
-            },            
-            stopAudio: function ($el, args){
-                // Assuming that media object was previosly created
-                // var media = defaults.mediaDict[$el.attr('id')];
-                // media[0].pause();
-                // media[0].currentTime = 0;
-
-                // $el.trigger('pause');
-                // $el.remove();
-                defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
-                // $el.prop("currentTime", 0);
-                $el.attr('src', null);  
-            },
-            stopVideo: function ($el, args){
-                // Assuming that media object was previosly created
-                // var media = defaults.mediaDict[$el.attr('id')];
-                // media[0].pause();
-                // media[0].currentTime = 0;
-                // $el.remove();
-                defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
-                $el.css({"display": "none"});
-                // $el.prop("currentTime", 0);
-                $el.attr('src', null);
-            },            
-            fadeInAudio: function ($el, args){
-                var args = $.extend({}, {'currentTime': 0, 'speed': 'slow', 'values':{'volume' : 1}}, args);
-                if(!$el.attr('src'))
-                    $el.attr('src', defaults.mediaDict[$el.attr('id')]);
-                $el.trigger('load');
-                $el.bind('canplay', function(){
-                    $el.trigger('play');
-                    $el.prop('currentTime', args['currentTime']);
-                    // $el.prop('volume', 0);                      
-                });
-                // var media = defaults.mediaDict[$el.attr('id')] ||
-                //     $el.mediaelementplayer({
-                //         pauseOtherPlayers: true,
-                //         startVolume: 1
-                //     });
-                // defaults.mediaDict[$el.attr('id')] = media;
-                // media[0].currentTime = args['currentTime'];
-                // media[0].play();                                
-              
-                // $el.animate(args['values'], args['speed']);
-            },
-            fadeInVideo: function ($el, args){
-                var args = $.extend({}, {'currentTime': 0, 'speed': 'slow', 'values':{'volume' : 1}}, args);
+            playMedia: function ($el, args, fadeIn){
+                var args = $.extend({}, {'currentTime': 0, 'duration': 'slow', 'values':{'volume' : 1}}, args);
                 if(!$el.attr('src'))
                     $el.attr('src', defaults.mediaDict[$el.attr('id')]);
                 $el.css('display', 'block');
                 $el.trigger('load');
                 $el.bind('canplay', function(){
-                    
                     $el.trigger('play');
+                    $el.prop('volume', 1);
+                    // Checking if media definition has curentTime
+                    if($el.attr('data-fromtime'))
+                        args['currentTime'] = $el.attr('data-fromtime'); 
+                    if($el.attr('data-volume'))
+                        args['values']['volume'] = $el.attr('data-volume');                                            
                     $el.prop('currentTime', args['currentTime']);
-                    $el.prop('volume', 0);                     
-                });                 
-                // var media = defaults.mediaDict[$el.attr('id')] ||
-                //     $el.mediaelementplayer({
-                //         pauseOtherPlayers: true,
-                //         startVolume: 1
-                //     });
-                // defaults.mediaDict[$el.attr('id')] = media;
-                // media[0].currentTime = args['currentTime'];
-                // media[0].play();                 
-                $el.animate(args['values'], args['speed']);              
+                    if (typeof fadeIn !== 'undefined' && fadeIn){
+                        $el.prop('volume', 0);
+                        $el.animate(args['values'], args['duration']);
+                    }                                        
+                });
+                if($el.attr('data-next')){
+                    $el.bind('ended', function(){
+                        // done playing
+                        // Doing fadeOut
+                        defaults.stopMedia($el, args, fadeIn);
+                        // Triggering 'next' transition
+                        defaults.next();
+                    });                         
+                }  
+            },
+            stopMedia: function ($el, args, fadeOut){
+                var args = $.extend({}, {'duration': 'slow', 'values':{'volume' : 0}}, args);
+                // Assuming that media object was previosly created
+                defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
+                $el.css({"display": "none"});
+                if (typeof fadeOut !== 'undefined' && fadeOut){                
+                    $el.animate(args['values'], args['duration'], function(){
+                        // Callback for removing src
+                        $el.attr('src', null);
+                    });
+                } else {
+                    $el.attr('src', null);
+                }
+            },
+            playAudio: function ($el, args){
+                defaults.playMedia($el, args);
+            },
+            playVideo: function ($el, args){ 
+                defaults.playMedia($el, args);                                                                                                
+            },            
+            stopAudio: function ($el, args){
+                defaults.stopMedia($el, args);
+            },
+            stopVideo: function ($el, args){
+                defaults.stopMedia($el, args);
+            },            
+            fadeInAudio: function ($el, args){
+                defaults.playMedia($el, args, true);
+            },
+            fadeInVideo: function ($el, args){
+                defaults.playMedia($el, args, true);                           
             },
             fadeOutAudio: function ($el, args){
-                var args = $.extend({}, {'speed': 'slow', 'values':{'volume' : 0}}, args);
-                // Assuming that media object was previosly created
-                // var media = defaults.mediaDict[$el.attr('id')];
-                // $el.animate(args['values'], args['speed'], function () {
-                    // $el.trigger('pause');
-                    // $el.remove();
-                    // defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
-                    // $el.prop("currentTime", 0);
-                    // $el.attr('src', null);
-                // });
-                defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
-                // $el.prop("currentTime", 0);
-                $el.attr('src', null);                  
-                // defaults.mediaDict[$el.attr('id')] = $el.attr('src');
-                // $el.prop("currentTime", 0);
-                // $el.attr('src', null);                  
+                defaults.stopMedia($el, args, true);         
             },
             fadeOutVideo: function ($el, args){
-                var args = $.extend({}, {'speed': 'slow', 'values':{'volume' : 0}}, args);
-                // Assuming that media object was previosly created
-                // var media = defaults.mediaDict[$el.attr('id')];
-                // $el.animate(args['values'], args['speed'], function () {
-                    // $el.trigger('pause');
-                    // $el.remove();
-                    defaults.mediaDict[$el.attr('id')] = defaults.mediaDict[$el.attr('id')] || $el.attr('src');
-                    // $el.prop("currentTime", 0);
-                    $el.attr('src', null);
-                    $el.css('display', 'none');
-                // });
-                // defaults.mediaDict[$el.attr('id')] = $el.attr('src');
-                // $el.prop("currentTime", 0);
-                // $el.attr('src', null);                
+                defaults.stopMedia($el, args, true); 
             },
-            //Kinda boxing and unboxing params (I know is not so clear :( )
+
+            // Kinda boxing and unboxing params (I know is not so clear :( )
             ex: function(bag){
                 bag.args = $.extend({}, {'id': bag.$el.attr('id')}, bag.args);
                 bag.$el = $('#' + bag.args['id']);
@@ -257,8 +206,8 @@
     // The actual plugin constructor
     function Plugin( element, options ) {
         this.element = element;
-
         this.options = $.extend( {}, defaults, options) ;
+
         
         this._defaults = defaults;
         this._name = pluginName;
@@ -284,6 +233,10 @@
         //Avoiding namespace confusions
         var self = this;
 
+        // Fast solution for having the 'next' function object
+        // accesible from default dictionary, definitely not elegant
+        defaults.next = next;        
+
         //Custom 'objects'
         //Slide objects
         function SlideItem($el, fSlide, lSlide){
@@ -299,12 +252,18 @@
         SlideItem.prototype.slide = function(slide){
             //Getting current function for a given slide (interval)
             // console.log(this.slides);
+
             var keyValue =  this.slides[slide - 1],
 
                 func = helpers.getValRec(keyValue, [slide, 'next', 'func'], 'identity'),
                 args = helpers.getValRec(keyValue, [slide, 'next', 'args'], {});
 
-            //If no function is defined, then the 'identity'  is used
+            // If no function is defined, then the 'identity'  is used
+            // Checking if '$el' has 'data-slidetimeout'. If it does, then 'next' func
+            // will be trigger after 'data-slidetimeout' attr value in miliseconds.
+            if(func !== 'identity' && func !== 'hideItem' && this.$el.attr('data-slidetimeout')){
+                self.options.timeoutVar = setTimeout(next, this.$el.attr('data-slidetimeout'));
+            }
             return self.options[func](this.$el, args);
 
         };
@@ -556,6 +515,10 @@
         //Show all slide items that are 'present' on
         //next slide 
         function next(){
+            // Stop execution of the function specified in the setTimeout
+            // console.log('next');
+            if(self.options.timeoutVar)
+                clearTimeout(self.options.timeoutVar);
             if (self.lastPerFrame[self.options.currentFrame] == self.options.currentSlide){
                 if(self.options.currentFrame + 1 >= self.frames.length) return;
                 nextFrame();
@@ -563,11 +526,15 @@
             }
             self.options.currentSlide++;
             update();
+            logInfo();
         }
 
         //Show all slide items that are 'present' on
         //previous slide 
         function previous(){
+            // Stop execution of the function specified in the setTimeout
+            if(self.options.timeoutVar)
+                clearTimeout(self.options.timeoutVar);            
             updatePrevious();
             if(self.options.currentSlide == 1){
                 if(self.options.currentFrame - 1 < 0) return;
@@ -576,6 +543,7 @@
             } 
             self.options.currentSlide--;
             update();
+            logInfo();
         }
 
 
@@ -599,6 +567,12 @@
 
         }
 
+        function logInfo(){
+            console.clear();
+            console.log('frames: ' + self.frames.length);
+            console.log('currentFrame: ' + self.options.currentFrame);
+            console.log('currentSlide: ' + self.options.currentSlide);
+        }
 
         function setEventHandlers () {
             // var socket = io.connect('http://' + document.domain + ':' + location.port + '/beampressk');
@@ -618,18 +592,17 @@
             }    
             //triggering key up
             $(document).on('keyup', function (event){
-                console.log(event.which);
                  //right arrow || space bar
                  if(event.which == 39 || event.which == 32 || event.which == 34){
                      next();
-                     console.log(self.options.mediaDict);
+                     // console.log(self.options.mediaDict);
                      if(socket)
                         socket.emit('update_info', {data: msg()});
                  }
                  //left arrow
                  if(event.which == 37 || event.which == 33){
                      previous();
-                     console.log(self.options.mediaDict);
+                     // console.log(self.options.mediaDict);
                      if(socket)
                         socket.emit('update_info', {data: msg()});
                  }
@@ -640,9 +613,10 @@
         _init();
         setEventHandlers();
         // console.log(self.options);
-        console.log(self.frames);
-        console.log(self.lastPerFrame);
-        console.log(self.firstPerFrame);
+        // console.log(self.frames);
+        logInfo();
+        // console.log(self.lastPerFrame);
+        // console.log(self.firstPerFrame);
         // console.log(self.framesItems);
 
         //Providing chaining

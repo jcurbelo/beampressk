@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, request, make_response, jsonify
 from flask.ext.socketio import SocketIO, emit, disconnect
 from gevent import monkey
-
+from decorators import requires_auth
 monkey.patch_all()
 
 
@@ -13,6 +13,7 @@ socketio = SocketIO(app)
 database = {
     'current_frame': 0,
     'current_slide': 1,
+    'volume': 100
 }
 
 # Custom errors
@@ -26,11 +27,23 @@ def internal_server_error(e):
 
 # Control panel
 @app.route('/')
+@requires_auth
 def index():
     return render_template('index.html', 
                            current_frame=database.get('current_frame', 0),
                            current_slide=database.get('current_slide', 0),
+                           volume=database.get('volume', 100),
                            name=database.get('name', ''))
+
+# Live Feed Control panel
+@app.route('/live-feed')
+@requires_auth
+def live_feed():
+    return render_template('live_feed_control.html', 
+                           current_frame=database.get('current_frame', 0),
+                           current_slide=database.get('current_slide', 0),
+                           volume=database.get('volume', 100),
+                           name=database.get('name', ''))    
 
 # Presentations
 @app.route('/presentation/<name>')
@@ -52,15 +65,6 @@ def beampressk_update_info(message):
     database['current_slide'] = data.get('currentSlide', 0)
     emit('response', {'data': data}, broadcast=True)
 
-# Responses
-@socketio.on('update_info', namespace='/beampressk')
-def beampressk_update_info(message):
-    data = message.get('data', {})
-    # Updating database
-    database['current_frame'] = data.get('currentFrame', 0)
-    database['current_slide'] = data.get('currentSlide', 0)
-    emit('response', {'data': data}, broadcast=True)
-
 # Actions
 @socketio.on('next', namespace='/beampressk')
 def beampressk_next():
@@ -72,19 +76,28 @@ def beampressk_prev():
 
 @socketio.on('volume', namespace='/beampressk')
 def beampressk_volume(message):
-    emit('volume_response', {'data': message.get('data', {})}, broadcast=True)
+    database['volume'] = message.get('data', 1) * 1e2
+    emit('volume_response', {'data': message.get('data', 1)}, broadcast=True)
 
 @socketio.on('live_feed', namespace='/beampressk')
-def beampressk_live_feed():
-    emit('live_feed_response', broadcast=True)
+def beampressk_live_feed(message):
+    emit('live_feed_response', {'data': message.get('data', {})}, broadcast=True)
 
 @socketio.on('reload', namespace='/beampressk')
 def beampressk_reload():
     emit('reload_response', broadcast=True)
 
 @socketio.on('hide_msg', namespace='/beampressk')
-def beampressk_reload():
-    emit('hide_msg_response', broadcast=True)    
+def beampressk_hide_msg():
+    emit('hide_msg_response', broadcast=True)
+
+@socketio.on('play_random_audio', namespace='/beampressk')
+def beampressk_play_rnd(message):
+    emit('play_random_audio_response', {'data': message.get('data', {})}, broadcast=True)
+
+@socketio.on('stop_random_audio', namespace='/beampressk')
+def beampressk_stop_rnd(message):
+    emit('stop_random_audio_response', {'data': message.get('data', {})}, broadcast=True)                  
 
 # RESTful requests
 

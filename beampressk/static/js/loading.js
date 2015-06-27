@@ -62,27 +62,33 @@
 	                self.options.$audio.trigger('load');
 	                self.options.$audio.bind('canplay', function(){
 	                    self.options.$audio.prop('currentTime', '14');
+	                    self.options.$audio.prop('volume', 0);
 	                    self.options.$audio.trigger('play');
+	                    self.options.$audio.animate({
+	                    	'volume': 1
+	                    }, 'slow');
 	                });                	
 	            }
 
 	            if(index == 3 && !self.options.frameDisplayed){
 	            	self.options.frameDisplayed = true;
-	            	$("#frame-loading").css('background-color', 'white');
-	            	$("#logo-loading").css('opacity', 1);
+	            	$("#frame-loading").animate({'background-color': 'white'}, 'slow');
+	            	$("#logo-loading").animate({'opacity': 1}, 'slow');
 	            }
 
 	            if(index == 7 && !self.options.bordersDisplayed){
 	            	self.options.bordersDisplayed = true;
-	            	$("#frame-loading > h1").css('height', '42px').css('opacity', 1);
-	            	$("#frame-loading > footer").css('height', '30px').css('opacity', 1);
+	            	$("#frame-loading > h1").css('display', 'block');
+	            	$("#frame-loading > h1").animate({'height': '42px', 'opacity': 1}, 'slow');
+
+	            	$("#frame-loading > footer").animate({'height': '30px', 'opacity': 1}, 'slow');
 	            }                
 
 	            $("#loading").attr('value', value);
 	            $("#info").html(self.options.infos[index]);
 	            self.options.currentTime += self.options.interval;
 	            if(value >= 1e2)
-	                clearInterval(exec);
+	                clearInterval(self.options.exec);
 	        }
 	    } 
 

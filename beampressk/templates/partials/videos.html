@@ -1,0 +1,4 @@
+{% for video in videos %}
+<video class="initial-video" preload="none" class="full-video" id="video-{{ loop.index }}"
+style="width: 850px; display: none;" src="{{ video }}"></video>
+{% endfor %}
