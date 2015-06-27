@@ -40,3 +40,47 @@ nosetests.xml
 
 # Virtual environment
 venv
+
+# Images
+*.jpg
+*.png
+*.jpeg
+*.bmp
+*.gif
+*.JPG
+
+# Audios
+*.mp3
+
+# Videos
+*.mp4
+
+# Custom files and directories
+*.sublime-*
+beampressk/static/css/chart.css
+beampressk/static/css/jquery.jqplot.min.css
+beampressk/static/css/prism.css
+beampressk/static/js/Chart.js
+beampressk/static/js/cssCharts/
+beampressk/static/js/jqplot/
+beampressk/static/js/jquery-migrate-1.2.1.js
+beampressk/static/js/prism.js
+beampressk/templates/amistad/
+beampressk/templates/computadora/
+beampressk/templates/darwin/
+beampressk/templates/instec/
+beampressk/templates/jce/
+beampressk/templates/miercoles-de-sonrisas/
+beampressk/templates/pasteur/
+beampressk/templates/percepcion/
+beampressk/templates/cleu2015/
+beampressk/static/js/MathJax.tar
+beampressk/static/js/MathJax/
+beampressk/static/css/ball.css
+beampressk/static/css/eduardo.css
+beampressk/static/css/jce.css
+beampressk/templates/contador/index2.html
+beampressk/templates/miedo/index.html
+beampressk/templates/predefensa/index.html
+beampressk/templates/tesis-eduardo/index.html
+beampressk/templates/tesis-robin/index.html
