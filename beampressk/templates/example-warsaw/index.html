@@ -1,0 +1,148 @@
+{% extends "warsaw_base.html" %}
+{% block content %}
+<!-- Frame -->
+<section class="frame">
+  <h1>beampressk (https://github.com/jcurbelo/beampressk)</h1>
+  <div class="frame-content">
+    <div class="block-title">
+      Welcome to <i>beampressk</i>!
+    </div>
+
+    <div class="authors">
+      <ul>
+        <li>Robin Curbelo <a href="https://github.com/jcurbelo">https://github.com/jcurbelo</a> </li>
+      </ul>
+    </div>
+
+    <div class="inst">
+      <p>Presentation tool inspired by Beamer (LaTeX).</p>
+    </div>
+  </div>
+
+
+  <footer class="clearfix">
+    <div class="authors">
+      <p>Robin Curbelo <a href="https://github.com/jcurbelo">jcurbelo</a> </p>
+    </div>
+    <div class="topic">
+      <p>beampressk example</p>
+    </div>
+  </footer>
+</section>
+<!-- End of frame -->
+
+<!-- Frame -->
+<section class="frame">
+  <h1>Flask-SocketIO + beampress.js + Socket.IO </h1>
+  <div class="frame-content">
+
+    <div class="block" data-onslide="2-">
+      <header>
+        Flask-SocketIO (https://github.com/miguelgrinberg/Flask-SocketIO)
+      </header>
+      <div class="block-content">
+        <div class="center">
+          <img src="{{ url_for('static', filename = 'img/flask-example1.png') }}" alt="Flask Example 1" width="600px">
+        </div>
+      </div>
+    </div>
+
+
+    <div class="block" data-onslide="3-">
+      <header>
+        Socket.IO (https://github.com/socketio/socket.io-client)
+      </header>
+      <div class="block-content">
+        <div class="center">
+          <img src="{{ url_for('static', filename = 'img/socket-io-example1.png') }}" alt="Flask Example 1" width="600px">
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <footer class="clearfix">
+    <div class="authors">
+      <p>Robin Curbelo <a href="https://github.com/jcurbelo">jcurbelo</a> </p>
+    </div>
+    <div class="topic">
+      <p>beampressk example</p>
+    </div>
+  </footer>
+</section>
+<!-- End of frame -->
+
+<!-- Frame -->
+<section class="frame">
+  <h1>Live feed feature</h1>
+  <div class="frame-content">
+
+    <div class="block">
+      <div class="block-content">
+        <ul>
+          <li>Browser needs permission for camera and microphone usage.</li>
+          <li>Live feed is visible only in the "presentation" view.</li>
+          <li>Live feed can be turned "off/on" in the "admin" view.</li>
+        </ul>
+      </div>
+    </div>
+
+
+  </div>
+  <footer class="clearfix">
+    <div class="authors">
+      <p>Robin Curbelo <a href="https://github.com/jcurbelo">jcurbelo</a> </p>
+    </div>
+    <div class="topic">
+      <p>beampressk example</p>
+    </div>
+  </footer>
+</section>
+<!-- End of frame -->
+
+<!-- Frame -->
+<section class="frame">
+  <h1>Screen messages</h1>
+  <div class="frame-content">
+
+    <div class="block">
+      <div class="block-content">
+        <ul>
+          <li>Show/Hide messages</li>
+        </ul>
+      </div>
+    </div>
+
+
+  </div>
+  <footer class="clearfix">
+    <div class="authors">
+      <p>Robin Curbelo <a href="https://github.com/jcurbelo">jcurbelo</a> </p>
+    </div>
+    <div class="topic">
+      <p>beampressk example</p>
+    </div>
+  </footer>
+</section>
+<!-- End of frame -->
+
+<!-- Frame -->
+<section class="frame">
+  <h1>beampressk</h1>
+  <div class="frame-content">
+    <div class="block">
+      <div class="block-content">
+         The End!
+      </div>
+    </div>
+  </div>
+  <footer class="clearfix">
+    <div class="authors">
+      <p>Robin Curbelo <a href="https://github.com/jcurbelo">jcurbelo</a> </p>
+    </div>
+    <div class="topic">
+      <p>beampressk example</p>
+    </div>
+  </footer>
+</section>
+<!-- End of frame -->
+{% endblock %}

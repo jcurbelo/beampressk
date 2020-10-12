@@ -2,18 +2,19 @@
 <html>
     <head>
         <meta charset="utf-8"  content="">
-        <meta name="author" content="Proyecto Delta">    
+        <meta name="author" content="Proyecto Delta">
         <title>{% block title %}{% endblock title %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/warsaw.css') }}">         
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/warsaw.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/livefeed.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/livefeed_components.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/msg.css') }}">        
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/msg.css') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         {% block styles %}{% endblock styles %}
     </head>
-    
+
     <body>
         {% include 'partials/live_feed.html' %}
         {% include 'partials/msg.html' %}
@@ -22,21 +23,21 @@
             <div class="msg-wrapper">
                 <p id="msg-text"></p>
             </div>
-        </div>  --> 
+        </div>  -->
 
         <div id="main-container">
             {% block content %}
-            {% endblock %}        
+            {% endblock %}
         </div>
 
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/socket.io.min.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/jquery-1.10.2.min.js') }}"></script>
-    <script src="{{ url_for('static', filename = 'js/jquery.animate-colors-min.js') }}"></script>    
+    <script src="{{ url_for('static', filename = 'js/jquery.animate-colors-min.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/beampress.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/loading.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/livefeed.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/randomAudio.js') }}"></script>
-    {% block scripts %}    
+    {% block scripts %}
     <script>
         $(document).ready(function(){
             var $currentVideo = null,
@@ -50,11 +51,11 @@
 
             function initialVideos(){
                 videoExec = setInterval(videoTick, 100);
-            }   
+            }
 
             function stopInitalVideos(){
                 clearInterval(videoExec);
-                $currentVideo.attr('src', null);                
+                $currentVideo.attr('src', null);
             }
 
             function videoTick(){
@@ -67,12 +68,12 @@
                     $currentVideo.bind('canplay', function(){
                         $currentVideo.trigger('play');
                         $currentVideo.prop('volume', 0);
-                        $currentVideo.animate(fadeInArgs['values'], fadeInArgs['duration']);                                    
+                        $currentVideo.animate(fadeInArgs['values'], fadeInArgs['duration']);
                     });
 
                     $currentVideo.bind('ended', function(){
                         $currentVideo.css({"display": "none"});
-             
+
                         $currentVideo.animate(fadeOutArgs['values'], fadeOutArgs['duration'], function(){
                             $currentVideo.attr('src', null);
                             doNext = true;
@@ -81,9 +82,9 @@
                     });
 
                     doNext = false;
-                }                         
+                }
 
-            }  
+            }
 
             var s = io.connect('http://' + document.domain + ':' + location.port + '/beampressk'),
                 loading = new Loading(),
@@ -108,14 +109,14 @@
 
             s.on('msg', function(msg){
                 $('.msg-container').css('display', 'block');
-                var html = '<li class="msg-effect"><img src="http://beampressk.com/img/anonymous.jpg"><div class="message">' + msg.data + '</div></li>',
+                var html = `<li class="msg-effect"><img src="{{ url_for('static', filename = 'img/user.jpg') }}"><div class="message"> ${msg.data} </div></li>`,
                     $el = $(html);
                     len_children = $('.inner-chat').children().length;
                 if (len_children === 0 || $('.first').length === 0)
                     $el.addClass('first');
                 $el.appendTo('.inner-chat');
                 setTimeout(function(){$('.msg-effect').addClass('msg-show');}, 100);
-                                
+
             });
 
         s.on('hide_msg_response', function (){
@@ -126,21 +127,21 @@
             },'fast', function () {
                 $el.removeClass('first');
                 $el.css('display', 'none');
-                $el.next().addClass('first');                   
+                $el.next().addClass('first');
             });
-            
-        }); 
+
+        });
 
            $("#main-container").beampress({
             'socket': s,
-            'currentFrame': {{ current_frame }}, 
+            'currentFrame': {{ current_frame }},
             'currentSlide': {{ current_slide }},
             'animateProgress': loading.options.animateProgress,
             'initialVideos': initialVideos,
-            'stopInitalVideos': stopInitalVideos });                                             
+            'stopInitalVideos': stopInitalVideos });
 
         });
-    </script>         
+    </script>
     {% endblock scripts %}
     </body>
 </html>

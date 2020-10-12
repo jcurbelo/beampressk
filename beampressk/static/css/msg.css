@@ -4,7 +4,7 @@
     top: 53px;
     left: 50%;
     transform: translate(-50%, 0%);
-    width: 500px; 
+    width: 500px;
     /*height: 375px;*/
     /*background: rgb(249, 229, 229);*/
     z-index: 9999;
@@ -16,7 +16,7 @@
     font-family: candara, sans-serif;
     color: black;
     font-size: 28px;
-    padding: 5px 15px;    
+    padding: 5px 15px;
 }
 
 #msg-text{
@@ -50,6 +50,10 @@
     opacity: 0;
 }
 
+.msg-effect > img {
+    width: 50px;
+}
+
 .msg-show.msg-effect{
     -webkit-transform: translateY(0%);
     -moz-transform: translateY(0%);
@@ -66,7 +70,7 @@
   position:relative;
   display:inline-block;
 
-  
+
 }
 
 .chat ul li img{
@@ -82,7 +86,7 @@
   margin-top:20px;
   padding:10px;
   box-sizing:border-box;
-   
+
 }
 
 
