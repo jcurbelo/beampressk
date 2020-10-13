@@ -4,7 +4,7 @@
 <section class="frame">
   <h1>beampressk (https://github.com/jcurbelo/beampressk)</h1>
   <div class="frame-content">
-    <div class="block-title">
+    <div class="block-title main">
       Welcome to <i>beampressk</i>!
     </div>
 
@@ -36,25 +36,42 @@
   <h1>Flask-SocketIO + beampress.js + Socket.IO </h1>
   <div class="frame-content">
 
-    <div class="block" data-onslide="2-">
-      <header>
+    <div class="block">
+      <header data-onslide="1-">
         Flask-SocketIO (https://github.com/miguelgrinberg/Flask-SocketIO)
       </header>
-      <div class="block-content">
+      <div class="block-content" data-onslide="2-">
         <div class="center">
           <img src="{{ url_for('static', filename = 'img/flask-example1.png') }}" alt="Flask Example 1" width="600px">
         </div>
       </div>
     </div>
 
+  </div>
+  <footer class="clearfix">
+    <div class="authors">
+      <p>Robin Curbelo <a href="https://github.com/jcurbelo">jcurbelo</a> </p>
+    </div>
+    <div class="topic">
+      <p>beampressk example</p>
+    </div>
+  </footer>
+</section>
+<!-- End of frame -->
 
-    <div class="block" data-onslide="3-">
-      <header>
+<!-- Frame -->
+<section class="frame">
+  <h1>Flask-SocketIO + beampress.js + Socket.IO </h1>
+  <div class="frame-content">
+
+    <div class="block">
+      <header data-onslide="1-">
         Socket.IO (https://github.com/socketio/socket.io-client)
       </header>
-      <div class="block-content">
+      <div class="block-content" data-onslide="2-">
         <div class="center">
-          <img src="{{ url_for('static', filename = 'img/socket-io-example1.png') }}" alt="Flask Example 1" width="600px">
+          <img src="{{ url_for('static', filename = 'img/socket-io-example1.png') }}" alt="Flask Example 1"
+            width="600px">
         </div>
       </div>
     </div>
@@ -107,7 +124,8 @@
     <div class="block">
       <div class="block-content">
         <ul>
-          <li>Show/Hide messages</li>
+          <li>Show messages</li>
+          <li>Hide messages</li>
         </ul>
       </div>
     </div>
@@ -129,10 +147,8 @@
 <section class="frame">
   <h1>beampressk</h1>
   <div class="frame-content">
-    <div class="block">
-      <div class="block-content">
-         The End!
-      </div>
+    <div class="block-title main">
+      Thank you!
     </div>
   </div>
   <footer class="clearfix">
