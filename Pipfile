@@ -9,6 +9,8 @@ autopep8 = "*"
 
 [packages]
 flask-socketio = "*"
+python-dotenv = "*"
+flask-basicauth = "*"
 
 [requires]
 python_version = "3.8"

@@ -1,18 +1,7 @@
-from flask import Flask, render_template, request, jsonify, abort
-from flask_socketio import SocketIO, send, emit
-from decorators import requires_auth
+from flask import render_template, request, jsonify, abort
+from flask_socketio import send, emit
+from beampressk import app, socketio, database, basic_auth
 
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = '4ed8b4b022d12f40e9c06e6d7fcfd964e13f22810e865717'
-
-socketio = SocketIO(app)
-
-database = {
-    'current_frame': 0,
-    'current_slide': 1,
-    'volume': 100
-}
 
 # Custom errors
 
@@ -30,7 +19,7 @@ def internal_server_error(e):
 
 
 @app.route('/')
-@requires_auth
+@basic_auth.required
 def index():
     return render_template('index.html',
                            current_frame=database.get('current_frame', 0),
@@ -42,7 +31,7 @@ def index():
 
 
 @app.route('/live-feed')
-@requires_auth
+@basic_auth.required
 def live_feed():
     return render_template('live_feed_control.html',
                            current_frame=database.get('current_frame', 0),
@@ -136,8 +125,3 @@ def beampressk_emit_task():
         data = request.json['data']
         socketio.emit('msg', {'data': data}, namespace='/beampressk')
     return jsonify({'action': action}), 200
-
-
-if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0')
-    # app.run(host='0.0.0.0')
