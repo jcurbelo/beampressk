@@ -8,10 +8,10 @@ A [Flask](http://flask.pocoo.org/) webserver implementation to host and control 
 1. Clone this repo using your preferred method:
 
     ```bash
-    # HTTPS
-    $ git clone https://github.com/jcurbelo/beampressk.git
-
     # SSH
+    $ git clone git@github.com:jcurbelo/beampressk.git
+
+    # HTTPS
     $ git clone https://github.com/jcurbelo/beampressk.git
 
     # GitHub CLI
