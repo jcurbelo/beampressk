@@ -39,11 +39,11 @@
         },
         "flask-socketio": {
             "hashes": [
-                "sha256:3668675bf7763c5b5f56689d439f07356e89c0a52e0c9e9cd3cc08563c07b252",
-                "sha256:36c1d5765010d1f4e4f05b4cc9c20c289d9dc70698c88d1addd0afcfedc5b062"
+                "sha256:26de451f9ddfd2053ca66a0a5d6b6f53c65246ddcb453fbf9fa8dba364c73a52",
+                "sha256:37001b3507f2fa5d1c8d9c8e211dd88da6c5286ff0ebce16f27cb1b467d25d68"
             ],
             "index": "pypi",
-            "version": "==4.3.1"
+            "version": "==4.3.2"
         },
         "itsdangerous": {
             "hashes": [
@@ -107,17 +107,17 @@
         },
         "python-engineio": {
             "hashes": [
-                "sha256:36b33c6aa702d9b6a7f527eec6387a2da1a9a24484ec2f086d76576413cef04b",
-                "sha256:cfded18156862f94544a9f8ef37f56727df731c8552d7023f5afee8369be2db6"
+                "sha256:5a9e6086d192463b04a1428ff1f85b6ba631bbb19d453b144ffc04f530542b84",
+                "sha256:eab4553f2804c1ce97054c8b22cf0d5a9ab23128075248b97e1a5b2f29553085"
             ],
-            "version": "==3.13.2"
+            "version": "==3.14.2"
         },
         "python-socketio": {
             "hashes": [
-                "sha256:358d8fbbc029c4538ea25bcaa283e47f375be0017fcba829de8a3a731c9df25a",
-                "sha256:d437f797c44b6efba2f201867cf02b8c96b97dff26d4e4281ac08b45817cd522"
+                "sha256:5a21da53fdbdc6bb6c8071f40e13d100e0b279ad997681c2492478e06f370523",
+                "sha256:cd1f5aa492c1eb2be77838e837a495f117e17f686029ebc03d62c09e33f4fa10"
             ],
-            "version": "==4.6.0"
+            "version": "==4.6.1"
         },
         "six": {
             "hashes": [
@@ -151,10 +151,10 @@
         },
         "isort": {
             "hashes": [
-                "sha256:2c1d044a96c74367ab12188593d134c596747d97aec43b9cdb12eea83b6889d2",
-                "sha256:3820dd92c3214290cda6351f2ae2cedd5170759bc434af600eaad4f7a82a6ade"
+                "sha256:dcab1d98b469a12a1a624ead220584391648790275560e1a43e54c5dceae65e7",
+                "sha256:dcaeec1b5f0eca77faea2a35ab790b4f3680ff75590bfcb7145986905aab2f58"
             ],
-            "version": "==5.6.3"
+            "version": "==5.6.4"
         },
         "lazy-object-proxy": {
             "hashes": [
@@ -213,10 +213,10 @@
         },
         "toml": {
             "hashes": [
-                "sha256:926b612be1e5ce0634a2ca03470f95169cf16f939018233a670519cb4ac58b0f",
-                "sha256:bda89d5935c2eac546d648028b9901107a595863cb36bae0c73ac804a9b4ce88"
+                "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b",
+                "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"
             ],
-            "version": "==0.10.1"
+            "version": "==0.10.2"
         },
         "wrapt": {
             "hashes": [
